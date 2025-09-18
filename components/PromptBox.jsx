@@ -28,7 +28,11 @@ export default function PromptBox({ onSend, isLoading, mode, setMode }) {
           type="button"
           onClick={() => setMode("deep")}
           className={`px-3 py-1 rounded-full text-sm border
-            ${mode === "deep" ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/70"}`}
+            ${
+              mode === "deep"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted hover:bg-muted/70"
+            }`}
           title="Deep Think"
         >
           🧠 Deep Think
@@ -37,7 +41,11 @@ export default function PromptBox({ onSend, isLoading, mode, setMode }) {
           type="button"
           onClick={() => setMode("search")}
           className={`px-3 py-1 rounded-full text-sm border
-            ${mode === "search" ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/70"}`}
+            ${
+              mode === "search"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted hover:bg-muted/70"
+            }`}
           title="Search Web"
         >
           🔎 Search
@@ -52,7 +60,7 @@ export default function PromptBox({ onSend, isLoading, mode, setMode }) {
           onKeyDown={onKeyDown}
           placeholder="Ask anything… (Enter to send, Shift+Enter for newline)"
           rows={3}
-          className="flex-1 resize-none rounded-xl border bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-primary/40"
+          className="flex-1 resize-none rounded-xl border border-gray-400 bg-white px-3 py-2 outline-none focus:border-gray-900 focus:ring-0"
         />
         <button
           type="button"
@@ -60,7 +68,11 @@ export default function PromptBox({ onSend, isLoading, mode, setMode }) {
           disabled={!canSend}
           className={`
             h-10 px-4 rounded-xl font-medium border
-            ${canSend ? "bg-primary text-primary-foreground hover:opacity-90" : "bg-muted text-foreground/40 cursor-not-allowed"}
+            ${
+              canSend
+                ? "bg-primary text-primary-foreground hover:opacity-90"
+                : "bg-muted text-foreground/40 cursor-not-allowed"
+            }
           `}
           aria-label="Send message"
           title="Send"
@@ -70,7 +82,9 @@ export default function PromptBox({ onSend, isLoading, mode, setMode }) {
               <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></span>
               Sending…
             </span>
-          ) : "Send"}
+          ) : (
+            "Send"
+          )}
         </button>
       </div>
     </div>
