@@ -20,9 +20,15 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} font-sans bg-background text-foreground`}
       >
+        {/* App layout: Sidebar on the left, main chat area on the right */}
         <div className="flex h-screen">
+          {/* Sidebar (collapsible) */}
           <Sidebar />
-          <main className="flex-1 overflow-y-auto">{children}</main>
+
+          {/* Main content area (chat UI with PromptBox) */}
+          <main className="flex-1">
+            {children}
+          </main>
         </div>
       </body>
     </html>
