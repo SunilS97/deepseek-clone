@@ -1,45 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useApp } from "@/context/AppContext";
 import MessageBubble from "@/components/MessageBubble";
 import PromptBox from "@/components/PromptBox";
 
 export default function Home() {
-  const [messages, setMessages] = useState([]);        // [{id, role, content, mode?}]
-  const [isLoading, setIsLoading] = useState(false);
-  const [mode, setMode] = useState("deep");            // "deep" | "search"
-  const scrollRef = useRef(null);
-
-  // auto-scroll to bottom on new message
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages, isLoading]);
-
-  const handleSend = async (text) => {
-    // 1) add user message
-    const userMsg = { id: crypto.randomUUID(), role: "user", content: text };
-    setMessages((prev) => [...prev, userMsg]);
-
-    // 2) fake loading, then add assistant message
-    setIsLoading(true);
-    // Simulate thinking/lookup — Phase 7 will be a real API call
-    setTimeout(() => {
-      const replyText =
-        mode === "deep"
-          ? "🧠 (Phase 3 demo) Deep Think mode response.\n\nWe’ll wire the real model in Phase 7."
-          : "🔎 (Phase 3 demo) Search mode response.\n\nWe’ll wire the real model in Phase 7.";
-      const aiMsg = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: replyText,
-        mode, // show mode tag above the assistant bubble
-      };
-      setMessages((prev) => [...prev, aiMsg]);
-      setIsLoading(false);
-    }, 800);
-  };
+  const { messages, isLoading, scrollRef } = useApp();
 
   return (
     <div className="flex flex-col h-screen">
@@ -56,15 +22,9 @@ export default function Home() {
             </h1>
             <p className="mt-3 text-foreground/70">
               Ask questions about anything. Choose{" "}
-              <span className="font-medium">🧠 Deep Think</span> for reasoning
-              or <span className="font-medium">🔎 Search</span> when you want
-              web-informed answers.
+              <span className="font-medium">🧠 Deep Think</span> or{" "}
+              <span className="font-medium">🔎 Search</span>.
             </p>
-            <ul className="mt-6 text-left mx-auto max-w-lg space-y-2 text-foreground/70">
-              <li>• Press <b>Enter</b> to send, <b>Shift+Enter</b> for newline.</li>
-              <li>• The send button activates only when you type text.</li>
-              <li>• This is a Phase 3 placeholder — real AI comes in Phase 7.</li>
-            </ul>
           </div>
         ) : (
           <div className="mx-auto max-w-3xl">
@@ -83,12 +43,7 @@ export default function Home() {
       </div>
 
       {/* Prompt box */}
-      <PromptBox
-        onSend={handleSend}
-        isLoading={isLoading}
-        mode={mode}
-        setMode={setMode}
-      />
+      <PromptBox />
     </div>
   );
 }
