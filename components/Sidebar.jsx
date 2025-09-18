@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
@@ -13,7 +13,7 @@ export default function Sidebar() {
     >
       {/* Logo + Toggle */}
       <div className="flex items-center justify-between p-4 border-b">
-        {/* Logo and text */}
+        {/* Simple DS logo */}
         <div className="flex items-center">
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-lg">
             DS
@@ -60,7 +60,6 @@ export default function Sidebar() {
           <div className="w-10 h-10 bg-primary rounded flex items-center justify-center text-white font-bold cursor-pointer">
             QR
           </div>
-          {/* Popup QR code */}
           <div className="absolute left-14 bottom-0 w-32 h-32 bg-white border rounded-lg p-2 shadow-lg opacity-0 group-hover:opacity-100 transition">
             <img
               src="/qr.png"
@@ -70,11 +69,51 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Profile placeholder */}
-        <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center cursor-pointer">
-          P
-        </div>
+        {/* Clerk Profile Section */}
+        <ClerkProfile isOpen={isOpen} />
       </div>
     </aside>
+  );
+}
+
+/* Helper component for Clerk auth (login/logout) */
+function ClerkProfile({ isOpen }) {
+  const { isSignedIn, user } = useUser();
+
+  if (isSignedIn) {
+    return (
+      <div
+        className={`w-full ${
+          isOpen
+            ? "flex items-center justify-between gap-2"
+            : "flex justify-center"
+        }`}
+      >
+        {isOpen && (
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium truncate">
+              {user.fullName ||
+                user.username ||
+                user.primaryEmailAddress?.emailAddress}
+            </div>
+            <div className="text-xs text-foreground/60 truncate">
+              {user.primaryEmailAddress?.emailAddress}
+            </div>
+          </div>
+        )}
+        <UserButton
+          appearance={{ elements: { userButtonAvatarBox: "w-10 h-10" } }}
+          afterSignOutUrl="/"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <SignInButton mode="modal">
+      <button className="w-full px-3 py-2 rounded border hover:bg-muted transition">
+        {isOpen ? "Sign in" : "⇪"}
+      </button>
+    </SignInButton>
   );
 }
